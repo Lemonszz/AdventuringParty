@@ -4,8 +4,11 @@
   "package": "party.lemons.adventuringparty.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "PlayerEntityMixin",
+    "DefaultAttributeRegistryMixin"
   ],
   "client": [
+    "AbstractInventoryScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

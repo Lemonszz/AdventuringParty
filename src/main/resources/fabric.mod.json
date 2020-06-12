@@ -16,6 +16,9 @@
   "entrypoints": {
     "main": [
       "party.lemons.adventuringparty.AdventuringParty"
+    ],
+    "client": [
+      "party.lemons.adventuringparty.AdventuringPartyClient"
     ]
   },
   "mixins": [

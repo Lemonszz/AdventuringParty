@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -29,11 +30,11 @@ public class Party
 		return tags;
 	}
 
-	public void read(ListTag tags)
+	public void read(World world, ListTag tags)
 	{
 		for(int i = 0; i < tags.size(); i++)
 		{
-			addMember(PartyMember.fromTag(tags.getCompound(i)));
+			addMember(PartyMember.fromTag(world, tags.getCompound(i)));
 		}
 	}
 
@@ -48,5 +49,20 @@ public class Party
 	public boolean canAddMember(PartyMember member)
 	{
 		return members.size() < 4;
+	}
+
+	public static Party getPlayerParty(PlayerEntity playerEntity)
+	{
+		return ((PartyProvider)playerEntity).getParty();
+	}
+
+	public List<PartyMember> getMembers()
+	{
+		return members;
+	}
+
+	public void clear()
+	{
+		members.clear();
 	}
 }
