@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.registry.Registry;
 import party.lemons.adventuringparty.entity.render.CompanionRenderer;
+import party.lemons.adventuringparty.party.Party;
 
 import java.util.UUID;
 
@@ -18,6 +19,10 @@ public class AdventuringPartyClient implements ClientModInitializer
 	public void onInitializeClient()
 	{
 		EntityRendererRegistry.INSTANCE.register(AdventuringParty.COMPANION, (r,c)->new CompanionRenderer(r));
+
+		ClientSidePacketRegistry.INSTANCE.register(AdventuringParty.NET_SEND_PARTY, (ctx, data)->{
+			Party.getPlayerParty(MinecraftClient.getInstance().player).read(MinecraftClient.getInstance().world, data.readCompoundTag().getList("Data", 10));
+		});
 
 		ClientSidePacketRegistry.INSTANCE.register(AdventuringParty.NET_SEND_SPAWN, (ctx, data)->{
 			EntityType<?> type = Registry.ENTITY_TYPE.get(data.readVarInt());

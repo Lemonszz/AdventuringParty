@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import party.lemons.adventuringparty.party.Party;
 import party.lemons.adventuringparty.party.PartyProvider;
+import party.lemons.adventuringparty.util.EntityUtil;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends Entity implements PartyProvider
@@ -40,6 +41,17 @@ public abstract class PlayerEntityMixin extends Entity implements PartyProvider
 		getParty().read(world, tag.getList("PlayerParty", 10));
 	}
 
+	@Inject(at = @At("HEAD"), method = "tick()V")
+	public void tick(CallbackInfo cbi)
+	{
+		if(!synced && age > 20) //TODO: find better point to do this
+			{
+			EntityUtil.syncParty((PlayerEntity) (Object) this);
+			synced = true;
+		}
+	}
+
+
 	@Override
 	public Party getParty()
 	{
@@ -47,4 +59,5 @@ public abstract class PlayerEntityMixin extends Entity implements PartyProvider
 	}
 
 	public Party party;
+	private boolean synced = false;
 }

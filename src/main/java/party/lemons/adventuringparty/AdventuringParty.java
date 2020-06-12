@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import party.lemons.adventuringparty.entity.CompanionEntity;
 import party.lemons.adventuringparty.party.Party;
 import party.lemons.adventuringparty.party.PartyMember;
+import party.lemons.adventuringparty.util.EntityUtil;
 
 public class AdventuringParty implements ModInitializer
 {
@@ -28,6 +29,7 @@ public class AdventuringParty implements ModInitializer
 
 	public static final EntityType<CompanionEntity> COMPANION = FabricEntityTypeBuilder.create(SpawnGroup.MISC, CompanionEntity::new).trackable(128, 3).dimensions(EntityDimensions.fixed(0.6F, 1.8F)).build();
 	public static final Identifier NET_SEND_SPAWN = new Identifier(MODID, "spawn_entity");
+	public static final Identifier NET_SEND_PARTY = new Identifier(MODID, "send_member");
 
 	@Override
 	public void onInitialize()
@@ -40,10 +42,12 @@ public class AdventuringParty implements ModInitializer
 		UseBlockCallback.EVENT.register((PlayerEntity player, World world, Hand hand, BlockHitResult hitResult)->{
 			BlockState state = world.getBlockState(hitResult.getBlockPos());
 
-			if(state.getBlock() == Blocks.SPONGE)
+			if(state.getBlock() == Blocks.SPONGE && !player.world.isClient())
 			{
 				Party party = Party.getPlayerParty(player);
 				party.addMember(PartyMember.createNew(world));
+
+				EntityUtil.syncParty(player);
 
 				return ActionResult.SUCCESS;
 			}

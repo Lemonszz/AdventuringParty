@@ -16,8 +16,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import party.lemons.adventuringparty.AdventuringParty;
 import party.lemons.adventuringparty.gui.MemberDisplayWidget;
+import party.lemons.adventuringparty.party.Party;
 import party.lemons.adventuringparty.party.PartyDisplayRenderer;
 import party.lemons.adventuringparty.party.PartyMember;
+import party.lemons.adventuringparty.util.EntityUtil;
+import party.lemons.adventuringparty.util.PostDrawable;
 
 import java.util.List;
 
@@ -44,18 +47,20 @@ public abstract class AbstractInventoryScreenMixin<T extends ScreenHandler> exte
 				((Drawable) e).render(matrices, mouseX, mouseY, delta);
 			}
 		}
+
+		for(Element e : children())
+		{
+			if(e instanceof PostDrawable)
+			{
+				((PostDrawable) e).renderPost(matrices, mouseX, mouseY, delta, this);
+			}
+		}
 	}
 
 	@Inject(at = @At("TAIL"), method = "init()V")
 	public void init(CallbackInfo cbi)
 	{
-		testParty.clear();
-		testParty.addMember(PartyMember.createNew(MinecraftClient.getInstance().world));
-		testParty.addMember(PartyMember.createNew(MinecraftClient.getInstance().world));
-		testParty.addMember(PartyMember.createNew(MinecraftClient.getInstance().world));
-		testParty.addMember(PartyMember.createNew(MinecraftClient.getInstance().world));
-
-		List<PartyMember> members = testParty.getMembers();
+		List<PartyMember> members = Party.getPlayerParty(MinecraftClient.getInstance().player).getMembers();
 		for(int i = 0; i < members.size(); i++)
 		{
 			PartyMember member = members.get(i);
