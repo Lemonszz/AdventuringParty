@@ -2,13 +2,11 @@ package party.lemons.adventuringparty.party;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.DefaultAttributeRegistry;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.World;
-import party.lemons.adventuringparty.AdventuringParty;
 import party.lemons.adventuringparty.entity.CompanionEntity;
 import party.lemons.adventuringparty.util.NameGenerator;
 
@@ -93,5 +91,18 @@ public class PartyMember
 	{
 		entity = new CompanionEntity(this, world);
 		return entity;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(obj instanceof PartyMember)
+		{
+			//TODO: check inv and attributes?
+			if(name.equalsIgnoreCase(((PartyMember)obj).name))
+				return true;
+		}
+
+		return super.equals(obj);
 	}
 }

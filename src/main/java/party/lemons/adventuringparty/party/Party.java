@@ -8,7 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import party.lemons.adventuringparty.AdventuringParty;
 
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class Party
 {
-	private final List<PartyMember> members;
+	private List<PartyMember> members;
 	private final PlayerEntity player;
 
 	public Party(PlayerEntity player)
@@ -38,11 +37,20 @@ public class Party
 
 	public void read(World world, ListTag tags)
 	{
-		clear();
+		List<PartyMember> newList = Lists.newArrayList();
+
 		for(int i = 0; i < tags.size(); i++)
 		{
-			addMember(PartyMember.fromTag(world, tags.getCompound(i)));
+			PartyMember newMember = PartyMember.fromTag(world, tags.getCompound(i));
+			if(i < members.size())
+			{
+				if(newMember.equals(members.get(i)))
+					newMember = members.get(i);
+			}
+			newList.add(newMember);
 		}
+
+		members = newList;
 	}
 
 	public boolean addMember(PartyMember member)
@@ -89,5 +97,11 @@ public class Party
 	public void clear()
 	{
 		members.clear();
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		return super.equals(obj);
 	}
 }
