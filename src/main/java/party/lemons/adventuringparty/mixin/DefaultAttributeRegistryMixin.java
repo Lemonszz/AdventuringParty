@@ -28,6 +28,6 @@ public class DefaultAttributeRegistryMixin
 	private static void onStaticInit(CallbackInfo cbi)
 	{
 		DEFAULT_ATTRIBUTE_REGISTRY = new HashMap<>(DEFAULT_ATTRIBUTE_REGISTRY);
-		DEFAULT_ATTRIBUTE_REGISTRY.put(AdventuringParty.COMPANION, CompanionEntity.createMobAttributes().build());
+		DEFAULT_ATTRIBUTE_REGISTRY.put(AdventuringParty.COMPANION, CompanionEntity.createAttributes().build());
 	}
 }

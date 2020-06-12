@@ -17,14 +17,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import party.lemons.adventuringparty.AdventuringParty;
 import party.lemons.adventuringparty.gui.MemberDisplayWidget;
 import party.lemons.adventuringparty.party.Party;
-import party.lemons.adventuringparty.party.PartyDisplayRenderer;
 import party.lemons.adventuringparty.party.PartyMember;
-import party.lemons.adventuringparty.util.EntityUtil;
 import party.lemons.adventuringparty.util.PostDrawable;
 
 import java.util.List;
-
-import static party.lemons.adventuringparty.AdventuringParty.testParty;
 
 @Mixin(AbstractInventoryScreen.class)
 public abstract class AbstractInventoryScreenMixin<T extends ScreenHandler> extends HandledScreen<T>

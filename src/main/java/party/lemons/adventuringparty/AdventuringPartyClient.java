@@ -8,6 +8,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.registry.Registry;
+import party.lemons.adventuringparty.entity.CompanionEntity;
 import party.lemons.adventuringparty.entity.render.CompanionRenderer;
 import party.lemons.adventuringparty.party.Party;
 
@@ -22,6 +23,19 @@ public class AdventuringPartyClient implements ClientModInitializer
 
 		ClientSidePacketRegistry.INSTANCE.register(AdventuringParty.NET_SEND_PARTY, (ctx, data)->{
 			Party.getPlayerParty(MinecraftClient.getInstance().player).read(MinecraftClient.getInstance().world, data.readCompoundTag().getList("Data", 10));
+		});
+
+		ClientSidePacketRegistry.INSTANCE.register(AdventuringParty.NET_SEND_MEMBER_ENTITY, (ctx, data)->{
+			int id = data.readInt();
+			int index = data.readInt();
+			ctx.getTaskQueue().execute(()->{
+				Entity e = MinecraftClient.getInstance().world.getEntityById(id);
+
+				if(e == null || !(e instanceof CompanionEntity))
+					return;
+				Party.getPlayerParty(MinecraftClient.getInstance().player).getMembers().get(index).setEntity((CompanionEntity)e);
+			});
+
 		});
 
 		ClientSidePacketRegistry.INSTANCE.register(AdventuringParty.NET_SEND_SPAWN, (ctx, data)->{

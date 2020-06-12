@@ -1,5 +1,6 @@
 package party.lemons.adventuringparty.party;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
@@ -24,7 +25,7 @@ public class PartyMember
 		this.inventory = inventory;
 		this.attributes = attributes;
 
-		entity = new CompanionEntity(AdventuringParty.COMPANION, world);
+		entity = new CompanionEntity(this, world);
 	}
 
 	public CompoundTag writeToNBT()
@@ -80,6 +81,17 @@ public class PartyMember
 
 	public CompanionEntity getEntity()
 	{
+		return entity;
+	}
+
+	public void setEntity(CompanionEntity e)
+	{
+		this.entity = e;
+	}
+
+	public Entity recreateEntity(World world)
+	{
+		entity = new CompanionEntity(this, world);
 		return entity;
 	}
 }

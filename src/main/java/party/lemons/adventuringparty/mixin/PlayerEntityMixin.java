@@ -44,8 +44,8 @@ public abstract class PlayerEntityMixin extends Entity implements PartyProvider
 	@Inject(at = @At("HEAD"), method = "tick()V")
 	public void tick(CallbackInfo cbi)
 	{
-		if(!synced && age > 20) //TODO: find better point to do this
-			{
+		if(!synced && age > 10) //TODO: find better point to do this
+		{
 			EntityUtil.syncParty((PlayerEntity) (Object) this);
 			synced = true;
 		}

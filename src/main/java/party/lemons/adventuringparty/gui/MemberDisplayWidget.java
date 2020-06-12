@@ -94,7 +94,13 @@ public class MemberDisplayWidget extends DrawableHelper implements Element, Draw
 		entityRenderDispatcher.setRotation(quaternion2);
 		entityRenderDispatcher.setRenderShadows(false);
 		VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
+		entity.setCustomNameVisible(false);
+		Text name = entity.getCustomName();
+		entity.setCustomName(null);
 		entityRenderDispatcher.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, immediate, 15728880);
+		entity.setCustomName(name);
+		entity.setCustomNameVisible(true);
+
 		immediate.draw();
 		entityRenderDispatcher.setRenderShadows(true);
 		entity.bodyYaw = h;

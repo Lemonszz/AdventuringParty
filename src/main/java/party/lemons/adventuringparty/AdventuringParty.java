@@ -25,11 +25,10 @@ public class AdventuringParty implements ModInitializer
 {
 	public static final String MODID = "adventuringparty";
 
-	public static Party testParty = new Party(null);
-
-	public static final EntityType<CompanionEntity> COMPANION = FabricEntityTypeBuilder.create(SpawnGroup.MISC, CompanionEntity::new).trackable(128, 3).dimensions(EntityDimensions.fixed(0.6F, 1.8F)).build();
+	public static final EntityType<CompanionEntity> COMPANION = FabricEntityTypeBuilder.create(SpawnGroup.MISC, (EntityType.EntityFactory<CompanionEntity>)CompanionEntity::new).trackable(128, 3).dimensions(EntityDimensions.fixed(0.6F, 1.8F)).build();
 	public static final Identifier NET_SEND_SPAWN = new Identifier(MODID, "spawn_entity");
-	public static final Identifier NET_SEND_PARTY = new Identifier(MODID, "send_member");
+	public static final Identifier NET_SEND_PARTY = new Identifier(MODID, "send_party");
+	public static final Identifier NET_SEND_MEMBER_ENTITY = new Identifier(MODID, "send_member_entity");
 
 	@Override
 	public void onInitialize()
@@ -42,12 +41,16 @@ public class AdventuringParty implements ModInitializer
 		UseBlockCallback.EVENT.register((PlayerEntity player, World world, Hand hand, BlockHitResult hitResult)->{
 			BlockState state = world.getBlockState(hitResult.getBlockPos());
 
-			if(state.getBlock() == Blocks.SPONGE && !player.world.isClient())
+			if(state.getBlock() == Blocks.SPONGE && !player.world.isClient() && hand == Hand.MAIN_HAND)
 			{
 				Party party = Party.getPlayerParty(player);
-				party.addMember(PartyMember.createNew(world));
+				PartyMember newMember = PartyMember.createNew(world);
+				if(party.addMember(newMember))
+				{
+					EntityUtil.syncParty(player);
 
-				EntityUtil.syncParty(player);
+					party.spawnPartyMember(newMember);
+				}
 
 				return ActionResult.SUCCESS;
 			}

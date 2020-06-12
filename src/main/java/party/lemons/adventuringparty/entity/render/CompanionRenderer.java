@@ -21,4 +21,11 @@ public class CompanionRenderer extends LivingEntityRenderer<CompanionEntity, Pla
 	{
 		return DefaultSkinHelper.getTexture(entity.getUuid());
 	}
+
+	protected boolean hasLabel(CompanionEntity e) {
+		if(e.isCustomNameVisible())
+			return super.hasLabel(e);
+
+		return false;
+	}
 }
