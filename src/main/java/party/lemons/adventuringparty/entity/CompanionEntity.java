@@ -6,6 +6,7 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.MobEntityWithAi;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
 import net.minecraft.text.LiteralText;
@@ -32,7 +33,7 @@ public class CompanionEntity extends MobEntityWithAi
 
 		setCustomName(new LiteralText(member.getName()));
 		setCustomNameVisible(true);
-		setInvulnerable(true);
+		setCanPickUpLoot(true);
 	}
 
 	@Override
@@ -43,6 +44,12 @@ public class CompanionEntity extends MobEntityWithAi
 
 	public static DefaultAttributeContainer.Builder createAttributes() {
 		return createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 20.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3499999940395355D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0D);
+	}
+
+	@Override
+	public boolean canPickUp(ItemStack stack)
+	{
+		return super.canPickUp(stack);
 	}
 
 	@Override

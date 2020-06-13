@@ -5,12 +5,15 @@ import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.widget.AbstractButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,6 +29,8 @@ import java.util.List;
 public abstract class AbstractInventoryScreenMixin<T extends ScreenHandler> extends HandledScreen<T>
 {
 
+	@Shadow protected abstract void init();
+
 	public AbstractInventoryScreenMixin(T handler, PlayerInventory inventory, Text title)
 	{
 		super(handler, inventory, title);
@@ -34,8 +39,6 @@ public abstract class AbstractInventoryScreenMixin<T extends ScreenHandler> exte
 	@Inject(at = @At("TAIL"), method = "render(Lnet/minecraft/client/util/math/MatrixStack;IIF)V")
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo cbi)
 	{
-		super.render(matrices, mouseX, mouseY, delta);
-
 		for(Element e : children())
 		{
 			if(e instanceof MemberDisplayWidget)
@@ -43,6 +46,8 @@ public abstract class AbstractInventoryScreenMixin<T extends ScreenHandler> exte
 				((Drawable) e).render(matrices, mouseX, mouseY, delta);
 			}
 		}
+
+		super.render(matrices, mouseX, mouseY, delta);
 
 		for(Element e : children())
 		{
@@ -64,6 +69,18 @@ public abstract class AbstractInventoryScreenMixin<T extends ScreenHandler> exte
 
 			MemberDisplayWidget displayWidget = new MemberDisplayWidget(member, 0, yOffset);
 			addChild(displayWidget);
+
+			for(Element e : displayWidget.addControls(this))
+			{
+				if(e instanceof AbstractButtonWidget)
+				{
+					addButton((AbstractButtonWidget)e);
+				}
+				else
+				{
+					addChild(e);
+				}
+			}
 		}
 	}
 

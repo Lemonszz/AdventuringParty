@@ -38,6 +38,15 @@ public class MemberDisplayWidget extends DrawableHelper implements Element, Draw
 		this.member = member;
 	}
 
+	public List<Element> addControls(Screen parent)
+	{
+		List<Element> elements = Lists.newArrayList();
+		elements.add(new MemberActionButton(x + 37, y + 5, 1, 0, member, "inventory"));
+		elements.add(new MemberActionButton( x + 37, y + 17, 0, 0, member, "mode"));
+
+		return  elements;
+	}
+
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
 	{
@@ -125,6 +134,6 @@ public class MemberDisplayWidget extends DrawableHelper implements Element, Draw
 	@Override
 	public boolean isMouseOver(double mouseX, double mouseY)
 	{
-		return mouseX >= x && mouseX <= x + 51 && mouseY >= y && mouseY <= y + 53;
+		return mouseX >= x && mouseX <= x + 36 && mouseY >= y && mouseY <= y + 53;
 	}
 }

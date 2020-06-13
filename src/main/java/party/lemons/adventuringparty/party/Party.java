@@ -23,6 +23,7 @@ public class Party
 		this.player = player;
 
 		members = Lists.newArrayList();
+
 	}
 
 	public Tag write()
